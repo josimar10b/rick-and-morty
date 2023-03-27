@@ -1,33 +1,42 @@
 
-const http = require("http");
-const getCharById = require("./controllers/getCharById");
-const getCharDetail = require("./controllers/getCharDetail");
-// const getCharById = require("./controllers/getCharById");
-// const getCharDetail = require("./controllers/getCharDetail");
+const express = require("express")
+const morgan = require("morgan");
+const router = require("./routes");
 const PORT = 3001;
+const server = express();
+const cors = require("cors")
 
-http
-    .createServer((req, res) => {
+server.use(express.json())
+server.use(cors())
+server.use(morgan("dev"))
+server.use("/rickandmorty", router)
 
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        const id = req.url.split("/").pop();
+server.listen(PORT, () => {
+    console.log("Server raised in port " + PORT);
+})
 
-        // if (req.url.includes("rickandmorty/character")){
-        //     const id = req.url.split("/").pop();
-        //     const character = characters.find(char => char.id === Number(id));
+// http
+//     .createServer((req, res) => {
 
-        //     res
-        //         .writeHead(200, {"Content-type": "Application/json"})
-        //         .end(JSON.stringify(character))
+//         res.setHeader("Access-Control-Allow-Origin", "*");
+//         const id = req.url.split("/").pop();
 
-        // }
+//         // if (req.url.includes("rickandmorty/character")){
+//         //     const id = req.url.split("/").pop();
+//         //     const character = characters.find(char => char.id === Number(id));
 
-        if (req.url.includes("onsearch")) {
-            getCharById(res, id);
-        };
+//         //     res
+//         //         .writeHead(200, {"Content-type": "Application/json"})
+//         //         .end(JSON.stringify(character))
 
-        if (req.url.includes("detail")) {
-            getCharDetail(res, id)
-        }
-    })
-    .listen(PORT, "localhost")
+//         // }
+
+//         if (req.url.includes("onsearch")) {
+//             getCharById(res, id);
+//         };
+
+//         if (req.url.includes("detail")) {
+//             getCharDetail(res, id)
+//         }
+//     })
+//     .listen(PORT, "localhost")
