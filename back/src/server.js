@@ -1,17 +1,12 @@
 
-const express = require("express")
-const morgan = require("morgan");
-const router = require("./routes");
 const PORT = 3001;
-const server = express();
-const cors = require("cors")
+const server = require("./app");
+const { sequelize } = require("./DB_connection");
+const saveApiData = require("./controllers/saveApiData")
 
-server.use(express.json())
-server.use(cors())
-server.use(morgan("dev"))
-server.use("/rickandmorty", router)
-
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
+    await sequelize.sync({ force: true })
+    await saveApiData();
     console.log("Server raised in port " + PORT);
 })
 
